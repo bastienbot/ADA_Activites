@@ -1,0 +1,104 @@
+import showSubCategories
+
+// Ceci est un commentaire, ils commencent tous par //
+// Le CSML ignore les commentaires, ils sont utiles pour les développeurs :3
+
+// Un chatbot commence toujours par l'étape "start" ci-dessous
+start:
+  // On va saluer l'utilisateur avec la commande `say`
+  say "Salut!"
+  say Typing(3000)
+  say "Je suis Actibot, le bot qui te trouve des activités au top dans Paris! 🤙"
+  // On peut poser une question à l'utilisateur et donner des choix de boutons
+  say Question("Tu es prêt.e ?",
+    buttons=[
+      // Vous remarquerez qu'on utilise le mot clé "as", il permet au csml de se souvenir de ce bouton
+      // pour s'en servir plus tard (dans le if)
+      Button("Oui let's gooo! 🔥") as btnOui,
+      Button("Pas tout à fait 😕") as btnNon
+    ])
+  // "hold" indique au chatbot qu'il doit attendre une réponse de l'utilisateur (une phrase ou un click)
+	hold
+  // La réponse de l'utilisateur va arriver dans la variable `event`
+  // Dans le cas présent on va voir ce que contient cette variable en demandant au csml si event "match" le bouton Oui
+  if (event match btnOui) {
+    say "Super allons-y!"
+  } else {
+    say "Pas de soucis, je me tiens à ta disposition!"
+    goto end
+  }
+  
+// ############################################################
+// À toi de jouer maintenant, il va falloir remplir les trous !
+// ############################################################
+// Exercice 0 : Efface la ligne ci-dessous pour commencer le workshop
+
+  remember category = false
+  remember subCategory = false
+  remember price = false
+
+  say "Fais moi confiance je vais trouver l'activité idéale pour toi."
+  say "J'ai juste besoin de te poser quelques questions 🧐."
+	goto categories
+
+categories:
+  // 1 - Il manque un mot clé pour poser la question
+	???? Question("Quelle catégorie d'activité préfères-tu?",
+	buttons=[
+    Button("Animations"),
+    Button("Concerts"),
+    Button("Evenements"),
+    Button("Expositions"),
+    Button("Spectacles")
+		])
+  // 2 - Indique au chatbot d'attendre la réponse de l'utilisateur ici
+	????
+  // 3 - Le chatbot doit se souvenir de la variable `category`
+	???? category = event
+  goto subcategories
+
+
+// 4 - Il faut nommer l'étape ci-dessous
+????:
+  // 5 - Tu dois ajouter le mot clé manquant pour que ça marche
+  say ????("Voici les sous catégories que j'ai dans la catégorie {{category}}",
+	buttons=showSubCategories(category))
+  hold
+  // 7 - Tu dois te souvenir de la saisie de l'utilisateur en la mettant dans la variable subCategory
+  ???? ???? = ????
+  goto price
+  
+price:
+  // 9 - Il manque BEAUCOUP de chose ci-dessous
+  ????"Préfères-tu les événements gratuits ou payants ?",
+	????
+		Button("gratuit"),
+		Button("payant")
+  ????
+  ????
+  remember price = event
+  // 10 - Indique au chatbot qu'il doit se rendre à l'étape results`
+  ???? results
+
+results:
+	say "Roulement de tambours 🥁"
+	say Typing(3000)
+  do res = App("Activites", category=category, price=price)
+  do cards = []
+  if (res.length() == 0) {
+    say "Je n'ai pas trouvé d'activités, désolé 😔"
+    goto start
+  }
+  foreach (val, index) in res {
+    do newCard = Card(
+      title=val.fields.title,
+      subtitle="{{val.fields.price_type}}€ - {{val.fields.address_name}}",
+      image_url=val.fields.cover_url
+    )
+    if (index < 6) do cards.push(newCard)
+  }
+  say Carousel(
+    cards = cards
+  )
+  say "tu trouveras plus d'informations sur https://quefaire.paris.fr 🔥"
+  goto end

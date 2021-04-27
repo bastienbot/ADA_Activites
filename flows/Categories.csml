@@ -1,0 +1,63 @@
+fn showSubCategories(category):
+  do categories = {
+    "Animations": [
+      "Atelier / Cours",
+      "Autre animation",
+      "Balade",
+      "Conférence / Débat",
+      "Lecture / Rencontre",
+      "Loisirs / Jeux",
+      "Stage",
+      "Visite guidée"
+    ],
+    "Concerts": [
+      "Autre concert",
+      "Chanson française",
+      "Classique",
+      "Électronique",
+      "Folk",
+      "Hip-Hop",
+      "Jazz",
+      "Musiques du Monde",
+      "Pop / Variété",
+      "Rock"
+    ],
+    "Evenements": [
+      "Autre événement",
+      "Brocante / Marché",
+      "Événement sportif",
+      "Festival / Cycle",
+      "Fête / Parade",
+      "Salon",
+      "Soirée / Bal"
+    ],
+    "Expositions": [
+      "Art Contemporain",
+      "Autre expo",
+      "Beaux-Arts",
+      "Design / Mode",
+      "Histoire / Civilisations",
+      "Illustration / BD",
+      "Photographie",
+      "Sciences / Techniques",
+      "Street-art"
+    ],
+    "Spectacles": [
+      "Autre spectacle",
+      "Cirque / Art de la Rue",
+      "Danse",
+      "Humour",
+      "Jeune public",
+      "Opéra / Musical",
+      "Projection",
+      "Théâtre"
+    ]
+  }
+  do subcategories = []
+  foreach (item, i) in categories[category] {
+    do subcategories.push(Button(item))
+  }
+  return subcategories
+
+start:
+  goto end
