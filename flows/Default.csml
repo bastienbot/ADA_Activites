@@ -32,7 +32,7 @@ start:
 // À toi de jouer maintenant, il va falloir remplir les trous !
 // ############################################################
 // Exercice 0 : Efface la ligne ci-dessous pour commencer le workshop
-
+/*
   remember category = false
   remember subCategory = false
   remember price = false
